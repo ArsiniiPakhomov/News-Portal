@@ -1,0 +1,103 @@
+from news.models import *
+user1 = User.objects.create_user('Maksim')
+user2 = User.objects.create_user('Olga')
+
+
+author1 = Author.objects.create(user = user1)
+author2 = Author.objects.create(user = user2)
+
+category1 = Category.objects.create(name = 'IT')
+category2 = Category.objects.create(name = 'Game')
+category3 = Category.objects.create(name = 'Cars')
+category4 = Category.objects.create(name = 'Technologies')
+
+
+arcticle1= Post.objects.create(author = author1, post_type = "AR", title = 'первый пост первого автора', text = 'текст первой статьи первого автора про Cars и Game')
+
+arcticle2= Post.objects.create(author = author2, post_type = "AR", title = 'первый пост второго автора', text = 'текст первой статьи второго автора про IT и Technologies')
+
+news1 = Post.objects.create(author = author2, post_type = "NW", title = 'первая новость второго атвора', text = 'текст первой новости второго автора про IT и Technologies')
+
+arcticle1.category.add(category3)
+arcticle1.category.add(category2)
+arcticle2.category.add(category1)
+arcticle2.category.add(category4)
+news1.category.add(category1)
+news1.category.add(category4)
+
+
+comment1 = Comment.objects.create(post = arcticle1, user = user1, text = 'первый комментарий к статье 1 от автора 1')
+
+comment2 = Comment.objects.create(post = arcticle2, user = user2, text = 'первый комментарий к статье 2 от автора 2')
+
+comment3 = Comment.objects.create(post = arcticle2, user = user1, text = 'второй комментарий к статье 2 от автора 1')
+
+comment4 = Comment.objects.create(post = news1, user = user1, text = 'первый комментарий к новости1 от автора 1')
+
+
+comment1.like()
+ 
+comment2.like()
+ 
+comment3.like()
+ 
+comment4.like()
+  
+comment3.like()
+ 
+comment1.like() 
+
+comment2.like()
+ 
+comment1.like() 
+
+comment1.dislike() 
+
+comment4.dislike()
+ 
+comment3.dislike()
+
+comment3.dislike()
+ 
+comment1.dislike() 
+
+arcticle1.like()
+ 
+arcticle1.like() 
+
+arcticle1.like()
+ 
+arcticle1.like() 
+
+arcticle1.like() 
+
+arcticle1.dislike()
+
+arcticle2.like() 
+
+arcticle2.like() 
+
+arcticle2.like()
+
+news1.like()
+
+news1.dislike()
+
+author1.update_rating() 
+author2.update_rating()
+
+best = Author.objects.all().order_by('-rating').values('user', 'rating')[0]
+print(best)
+
+Post.objects.all().order_by('-rating').values('date_in', 'author__user__username', 'rating', 'title', 'text')[0]
+
+Comment.objects.all().order_by().values('date_in', 'user__username', 'rating', 'text')[0]
+
+
+
+
+
+
+
+
+
