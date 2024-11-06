@@ -22,11 +22,11 @@ class Author(models.Model):
         # for pc in posts_comments:
         #     posts_comments_rating += pc.rating
 
-        print(posts_rating)
-        print("................")
-        print(comments_rating)
-        print("................")
-        print(posts_comments_rating)
+        # print(posts_rating)
+        # print("................")
+        # print(comments_rating)
+        # print("................")
+        # print(posts_comments_rating)
         
         self.rating = posts_rating * 3 + comments_rating + posts_comments_rating
         self.save()
@@ -36,6 +36,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
 
@@ -64,7 +67,11 @@ class Post(models.Model):
     
     def preview(self):
         small_text = set.text[0:124] + '...'
-        return small_text    
+        return small_text 
+    
+    def __str__(self):
+        return self.title.title()
+
 
 
 class PostCategory(models.Model):
@@ -86,5 +93,7 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -=1
         self.save()
+    
 
+        
 
