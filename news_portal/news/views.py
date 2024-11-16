@@ -1,6 +1,7 @@
 from typing import Any
 from django.shortcuts import render
-from django.views.generic import (ListView, DetailView, CreateView)
+from django.urls import reverse_lazy
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView)
 from .models import Post
 from .filters import NewFilter
 from datetime import datetime
@@ -55,25 +56,68 @@ class Search(ListView):
         context ['filterset'] = self.filterset
         return context
         
-class NewCreat (CreateView):
+class PostCreat (CreateView):
     form_class = NewsForm
     
     model = Post
    
-    template_name = 'new_create.html'
+    template_name = 'post_create.html'
 
-
-class ArtCreat (CreateView):
-    form_class = NewsForm
-    
-    model = Post
-   
-    template_name = 'articles_create.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        if self.request.path == 'post/create/articles':
-            post.articles_news = 'AR'
-        post.save
+        if self.request.path == '/posts/articles/create/':
+            post.post_type = 'AR'
+        post.save()
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.path == '/posts/articles/create/':
+            context['post_type'] = "Статья"
+        else:
+            context['post_type'] = "Новость"     
+        return context
+         
+class PostUpdate (UpdateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'post_create.html'
+    
+    # def form_valid(self, form):
+    #     post = form.save(commit=False)
+    #     if self.request.path == '/posts/articles/update/<int:pk>/':
+    #         post.post_type = 'AR'
+    #     post.save()
+    #     return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.path == '/posts/articles/update/<int:pk>/':
+            context['post_type'] = "Редактирвоание публикации "
+        else:
+            context['post_type'] = "Редактирование публикации"     
+        return context
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy ('post_list')
+
+    # def form_valid(self, form):
+    #     post = form.save(commit=False)
+    #     if self.request.path == '/posts/articles/delete/<int:pk>/':
+    #         post.post_type = 'AR'
+    #     post.save()
+    #     return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.path == '/posts/articles/delete/<int:pk>/':
+            context['post_type'] = "Удаление публикации"
+        else:
+            context['post_type'] = "Удаление публикации"     
+        return context
+
+    
     
