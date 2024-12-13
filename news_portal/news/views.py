@@ -1,11 +1,13 @@
 from typing import Any
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView)
 from .models import Post
 from .filters import NewFilter
 from datetime import datetime
 from .forms import NewsForm
+
 
 
 class NewsList(ListView):
@@ -56,7 +58,9 @@ class Search(ListView):
         context ['filterset'] = self.filterset
         return context
         
-class PostCreat (CreateView):
+class PostCreat (PermissionRequiredMixin,LoginRequiredMixin, CreateView,):
+    permission_required = ('news.add_post')
+
     form_class = NewsForm
     
     model = Post
@@ -79,7 +83,8 @@ class PostCreat (CreateView):
             context['post_type'] = "Новость"     
         return context
          
-class PostUpdate (UpdateView):
+class PostUpdate (PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = ('news.change_post')
     form_class = NewsForm
     model = Post
     template_name = 'post_create.html'
@@ -99,7 +104,7 @@ class PostUpdate (UpdateView):
             context['post_type'] = "Редактирование публикации"     
         return context
 
-class PostDelete(DeleteView):
+class PostDelete( LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy ('post_list')
