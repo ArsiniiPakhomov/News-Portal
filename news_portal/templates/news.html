@@ -5,13 +5,10 @@
 news
 {%endblock title%}
 
+
 {%block content%}
     <h1>все новости</h1>
-    {% comment %} <form action""method="get">
-        {{filterset.form.as_p}}
-        <input type="submit"value"Найти"/>
-    </form> {% endcomment %}
-    {% comment %} <input type="button" value="Искать" onclick="window.location='http://127.0.0.1:8000/new/search'"> {% endcomment %}
+    
     <hr>
     {%if news%}
     <center>
@@ -22,6 +19,7 @@ news
             <td>Дата публикации:</td>
             <td>Текст:</td>
             <td>Тип публикации:</td>
+            <td>Категория:</td>
         </tr>
         {%for new in news%}
         <tr>
@@ -29,7 +27,10 @@ news
             <td>{{new.date_in|date:'M d Y'}}</td>
             <td>{{new.text|truncatechars:20}}</td>
             <td>{{new.post_type}}</td>
-        </tr>
+            <td>{%for cat in new.category.all%}
+                    {{cat.name}}
+                {%endfor%}
+            </td>
         {%endfor%}
     </table>
 {% else %}

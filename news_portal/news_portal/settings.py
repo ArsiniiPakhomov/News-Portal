@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'news',
+    'news.apps.NewsConfig',
     'sign',
     'protect',
     'django_filters',
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
     
 ]
 SITE_ID = 1
@@ -158,3 +162,20 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_FORMS = {'signup': 'sign.models.CommonSignupForm'}
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+
+EMAIL_HOST = 'smtp.yandex.ru'  
+EMAIL_PORT = 465 
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') 
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
+EMAIL_USE_SSL = True
+SITE_URL = 'http://127.0.0.1:8000'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25 
+
+
+

@@ -9,4 +9,4 @@ class NewFilter(FilterSet):
     
     class Meta:
         model = Post
-        fields = {'title':['icontains'], 'author': ['exact'],}
+        fields = {'title':['icontains'], 'author': ['exact'], }
