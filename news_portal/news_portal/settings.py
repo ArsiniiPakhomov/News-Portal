@@ -164,7 +164,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_FORMS = {'signup': 'sign.models.CommonSignupForm'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'  
 EMAIL_PORT = 465 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') 
@@ -172,6 +172,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
 SITE_URL = 'http://127.0.0.1:8000'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
 
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"

@@ -1,9 +1,14 @@
 {% extends 'flatpages/default.html' %}
 
-{%block title%}
-new
-{%endblock title%}
 
-{%block content%}
-<h1>{{new}}</h1>
-{%endblock content%}
+
+{% block title %}
+new.title
+{% endblock title %}
+
+{% block content %}
+<h1>{{ new.title }}</h1>
+<h6>{{ new.time_in|date:'M d Y' }}</h6>
+<h2>{{ new.text }}</h2>
+
+{% endblock content %}
