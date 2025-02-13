@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 from pathlib import Path
 import os
+import logging
+logger = logging.getLogger('django')
 
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -187,3 +190,139 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style' : '{', 
+    'formatters': {
+        'DEBUG_log': {
+            'format': '%(asctime)s %(levelname)s  %(message)s',
+            'datefmt': '%d.%m.%Y  %H-%M-%S'
+        },
+        'INFO_log':{
+            'format': '%(asctime)s %(levelname)s  %(message)s'
+        },
+        'WARNING_log':{
+            'format': '%(asctime)s %(levelname)s  %(message)s %(pathname)s'
+        },
+        'ERROR_log':{
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s',
+            'datefmt': '%d.%m.%Y  %H-%M-%S'
+        },
+        'CRITICAL_log':{
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s'
+        },
+        'email':{
+            'format':'%(asctime)s %(levelname)s %(pathname)s %(message)s',
+            'datefmt': '%d.%m.%Y  %H-%M-%S'
+        },
+        'file_general':{
+           'format':'%(asctime)s %(levelname)s %(message)s %(module)s',
+        'datefmt': '%d.%m.%Y  %H-%M-%S'
+        },
+        'file_error':{
+           'format':'%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s',
+        'datefmt': '%d.%m.%Y  %H-%M-%S'
+        },
+        'file_security':{
+           'format':'%(asctime)s %(levelname)s %(message)s %(module)s',
+        'datefmt': '%d.%m.%Y  %H-%M-%S'
+        }
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    'handlers':{
+        'console_DEBUG':{
+            'level': 'DEBUG',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'DEBUG_log'
+        },
+        'console_INFO':{
+            'level': 'INFO',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'INFO_log'
+        },
+        'console_WARNING':{
+            'level': 'WARNING',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'WARNING_log'
+        },
+         'console_ERROR':{
+            'level': 'ERROR',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'ERROR_log'
+        },
+         'console_CRITICAL':{
+            'level': 'CRITICAL',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'CRITICAL_log'
+        },
+        'file_GENERAL':{
+            'level': 'INFO',
+            'filters':['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename':'Logging/general.log',
+            'formatter': 'file_general'
+        },
+        'file_ERROR':{
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename':'logging/errors.log',
+            'formatter': 'file_error'
+        },
+        'file_ERROR_CRITICAL':{
+            'level': 'CRITICAL',
+            'class': 'logging.FileHandler',
+            'filename':'Logging/errors.log',
+            'formatter': 'file_error'
+        },
+        'file_SECURITY':{
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename':'Logging/security.log',
+            'formatter': 'file_security'
+        },
+        'email_ADMINS':{
+            'level': 'ERROR',
+            'class': 'django.uyils.log.AdminEmailHandler',            
+            'formatter': 'email'
+        }
+    },
+    'loggers':{
+        'django':{
+            'hendlers':['console_DEBUG', 'console_INFO', 'console_WARNING', 'console_ERROR', 'console_CRITICAL', 'file_GENERAL',],
+            'propagate': True,
+        },
+        'django.request':{
+            'hendlers':['file_ERROR', 'file_ERROR_CRITICAL', 'email_ADMINS'],
+            'propagate': True,
+        },
+        'django.server':{
+            'hendlers':['file_ERROR', 'file_ERROR_CRITICAL', 'email_ADMINS'],
+            'propagate': True,
+        },
+        'django.template':{
+            'hendlers':['file_ERROR', 'file_ERROR_CRITICAL',],
+            'propagate': True,
+        },
+        'django.db.backends':{
+            'hendlers':['file_ERROR', 'file_ERROR_CRITICAL',],
+            'propagate': True,
+        },
+        'django.security':{
+            'hendlers':['file_SECURITY'],
+            'propagate': True,
+        }
+    }    
+},
