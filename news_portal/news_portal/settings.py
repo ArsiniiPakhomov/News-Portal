@@ -233,7 +233,7 @@ LOGGING = {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
-        'require_debug_true': {
+        'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         }
     },
@@ -245,7 +245,7 @@ LOGGING = {
             'formatter': 'DEBUG_log'
         },
         'console_INFO':{
-            'level': 'INFO',
+            'level': 'DEBUG',
             'filters':['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'INFO_log'
@@ -277,8 +277,9 @@ LOGGING = {
         },
         'file_ERROR':{
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename':'logging/errors.log',
+            'filters':['require_debug_false'],
+            'class':'logging.FileHandler',
+            'filename':'Logging/errors.log',
             'formatter': 'file_error'
         },
         'file_ERROR_CRITICAL':{
@@ -295,7 +296,7 @@ LOGGING = {
         },
         'email_ADMINS':{
             'level': 'ERROR',
-            'class': 'django.uyils.log.AdminEmailHandler',            
+            'class': 'django.utils.log.AdminEmailHandler',            
             'formatter': 'email'
         }
     },
@@ -325,4 +326,4 @@ LOGGING = {
             'propagate': True,
         }
     }    
-},
+}
